@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="orchard">
+
+    <physics name="1ms" type="ignore">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-imu-system"
+            name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-navsat-system"
+            name="gz::sim::systems::NavSat"/>
+
+    <!-- GPS reference: CMAC airfield, Canberra -->
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>-35.363262</latitude_deg>
+      <longitude_deg>149.165237</longitude_deg>
+      <elevation>584</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 100 0 0 0</pose>
+      <diffuse>0.9 0.9 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+    </light>
+
+    <!-- Ground plane -->
+    <model name="ground">
+      <static>true</static>
+      <link name="link">
+        <collision name="col">
+          <geometry><plane><normal>0 0 1</normal></plane></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><plane><normal>0 0 1</normal><size>200 200</size></plane></geometry>
+          <material><ambient>0.25 0.45 0.15 1</ambient></material>
+        </visual>
+      </link>
+    </model>
+
+    <!--
+      ORCHARD LAYOUT (top-down, X = forward, Y = right)
+      3 rows of 6 trees, 5 m row spacing, 4 m in-row spacing.
+      Drone alley is between rows.  Each tree: 3 m tall cylinder + sphere canopy.
+    -->
+
+    <!-- ===== ROW 1 (Y = 0) ===== -->
+    <model name="t_r1_1"><static>true</static><pose>0  0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r1_2"><static>true</static><pose>4  0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r1_3"><static>true</static><pose>8  0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r1_4"><static>true</static><pose>12 0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r1_5"><static>true</static><pose>16 0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r1_6"><static>true</static><pose>20 0  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+
+    <!-- ===== ROW 2 (Y = 5) ===== -->
+    <model name="t_r2_1"><static>true</static><pose>0  5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r2_2"><static>true</static><pose>4  5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r2_3"><static>true</static><pose>8  5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r2_4"><static>true</static><pose>12 5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r2_5"><static>true</static><pose>16 5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r2_6"><static>true</static><pose>20 5  0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+
+    <!-- ===== ROW 3 (Y = 10) ===== -->
+    <model name="t_r3_1"><static>true</static><pose>0  10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r3_2"><static>true</static><pose>4  10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r3_3"><static>true</static><pose>8  10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r3_4"><static>true</static><pose>12 10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r3_5"><static>true</static><pose>16 10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+    <model name="t_r3_6"><static>true</static><pose>20 10 0 0 0 0</pose>
+      <link name="l"><visual name="trunk"><geometry><cylinder><radius>0.12</radius><length>2.5</length></geometry></visual>
+      <visual name="canopy"><pose>0 0 1.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></geometry></visual></link></model>
+
+    <!-- Drone start: between row 1 and row 2 -->
+    <include>
+      <uri>model://iris_with_ardupilot</uri>
+      <pose>-3 2.5 0.2 0 0 0</pose>
+    </include>
+
+  </world>
+</sdf>
