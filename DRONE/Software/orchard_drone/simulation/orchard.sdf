@@ -9,7 +9,7 @@
 
     <plugin filename="gz-sim-sensors-system"
             name="gz::sim::systems::Sensors">
-      <render_engine>ogre2</render_engine>
+      <render_engine>ogre</render_engine>
     </plugin>
     <plugin filename="gz-sim-user-commands-system"
             name="gz::sim::systems::UserCommands"/>
@@ -27,6 +27,12 @@
       <elevation>584</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
+
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 1.0 1</background>
+      <shadows>true</shadows>
+    </scene>
 
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
@@ -55,41 +61,26 @@
           </geometry>
           <material>
             <ambient>0.25 0.45 0.15 1</ambient>
+            <diffuse>0.25 0.45 0.15 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
           </material>
         </visual>
       </link>
     </model>
 
-    <!-- ================================================================
-         TREE MACRO — each tree is a trunk cylinder + canopy sphere.
-         All tags explicitly opened and closed to prevent XML parse errors.
-         Row 1: Y=0, Row 2: Y=5, Row 3: Y=10
-         Trees spaced 4m apart along X axis (0, 4, 8, 12, 16, 20)
-         ================================================================ -->
-
-    <!-- ROW 1 (Y = 0) -->
     <model name="tree_r1_t1">
       <static>true</static>
       <pose>0 0 0 0 0 0</pose>
       <link name="trunk">
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
-          <geometry>
-            <cylinder>
-              <radius>0.12</radius>
-              <length>2.5</length>
-            </cylinder>
-          </geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
-          <geometry>
-            <sphere>
-              <radius>0.9</radius>
-            </sphere>
-          </geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <geometry><sphere><radius>0.9</radius></sphere></geometry>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -101,12 +92,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -118,12 +109,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -135,12 +126,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -152,12 +143,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -169,17 +160,16 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-    <!-- ROW 2 (Y = 5) -->
     <model name="tree_r2_t1">
       <static>true</static>
       <pose>0 5 0 0 0 0</pose>
@@ -187,12 +177,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -204,12 +194,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -221,12 +211,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -238,12 +228,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -255,12 +245,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -272,17 +262,16 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-    <!-- ROW 3 (Y = 10) -->
     <model name="tree_r3_t1">
       <static>true</static>
       <pose>0 10 0 0 0 0</pose>
@@ -290,12 +279,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -307,12 +296,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -324,12 +313,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -341,12 +330,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -358,12 +347,12 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
@@ -375,17 +364,16 @@
         <visual name="trunk_vis">
           <pose>0 0 1.25 0 0 0</pose>
           <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient></material>
+          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
         </visual>
         <visual name="canopy_vis">
           <pose>0 0 2.8 0 0 0</pose>
           <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient></material>
+          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
         </visual>
       </link>
     </model>
 
-    <!-- Iris drone — spawned by ArduPilot plugin, starts between row 1 and row 2 -->
     <include>
       <uri>model://iris_with_ardupilot</uri>
       <pose>-3 2.5 0.195 0 0 0</pose>
