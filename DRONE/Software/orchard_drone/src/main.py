@@ -1,10 +1,14 @@
 # src/main.py
-# Async mission brain — state machine + sensor fusion.
-# Run from the project root: SITL=1 python src/main.py
+# Async mission brain — HAL-aware state machine.
 #
-# DiffPhysDrone integrations used here:
-#   - lateral_nudge_diffphys() replaces hand-coded if/else potential field
-#   - PointMassModel predictive logging (optional, for debugging)
+# HAL changes vs previous version:
+#   1. Uses build_vision() factory from vision.py — no direct RowVision import
+#   2. Registers SensorHub with FlightController after construction so the
+#      watchdog can forward DISTANCE_SENSOR messages to virtual sensors
+#   3. FusionData.stale_sensors is suppressed in SIM_MODE when sensors have
+#      never received a reading (prevents false FAULT at mission start)
+#   4. _check_failsafes distinguishes SIM vs hardware sensor staleness
+#   5. SIM_MODE printed prominently in the startup log
 
 import asyncio
 import time
@@ -15,14 +19,15 @@ import math
 
 import config as cfg
 
-# Ensure src/ is on the path when running from project root
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
 
-from sensors     import SensorHub
-from navigation  import FlightController
-from vision      import RowVision, VisionResult
-from physics     import PointMassModel, lateral_nudge_diffphys
+from sensors    import SensorHub
+from navigation import FlightController
+from vision     import build_vision, VisionResult, MockVision
+from physics    import PointMassModel, lateral_nudge_diffphys
 
+# ── Logging ────────────────────────────────────────────────────────────────
+os.makedirs("logs", exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -33,10 +38,10 @@ logging.basicConfig(
 )
 log = logging.getLogger("brain")
 
-os.makedirs("logs", exist_ok=True)
 
-
-# ── States ─────────────────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# States
+# ══════════════════════════════════════════════════════════════════════════
 class S:
     TAKEOFF       = "TAKEOFF"
     ALLEY_FOLLOW  = "ALLEY_FOLLOW"
@@ -47,33 +52,57 @@ class S:
     DONE          = "DONE"
 
 
-# ── Sensor fusion snapshot ─────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# Sensor fusion snapshot
+# ══════════════════════════════════════════════════════════════════════════
 class FusionData:
     """
     One consistent snapshot of all hardware sensor readings per loop tick.
-    Vision is deliberately excluded — it is fetched separately as VisionResult
-    because it runs on a different thread with its own staleness check.
+
+    Staleness handling:
+      SIM_MODE=False  → standard: any sensor over SENSOR_TIMEOUT_S is stale
+      SIM_MODE=True   → MAVLink sensors are fed by the FC watchdog.
+                        In the first few seconds before Gazebo sends any
+                        DISTANCE_SENSOR messages, age() is inf.  We give the
+                        system a 15 s grace window at startup before reporting
+                        stale sensors, preventing false FAULT at boot.
     """
 
     __slots__ = ("lidar", "us_left", "us_right", "stale_sensors")
 
+    # Class-level startup timestamp so grace window is shared across ticks
+    _startup_time: float = time.monotonic()
+    _SIM_GRACE_S:  float = 15.0   # seconds to suppress stale-sensor faults
+
     def __init__(self, hub: SensorHub, timeout: float):
-        self.lidar         = hub.lidar.read()
-        self.us_left       = hub.us_left.read()
-        self.us_right      = hub.us_right.read()
-        self.stale_sensors = hub.any_stale(timeout)
+        self.lidar    = hub.lidar.read()
+        self.us_left  = hub.us_left.read()
+        self.us_right = hub.us_right.read()
+
+        raw_stale = hub.any_stale(timeout)
+
+        if cfg.SIM_MODE:
+            elapsed = time.monotonic() - FusionData._startup_time
+            if elapsed < FusionData._SIM_GRACE_S:
+                # Still in startup grace — suppress stale reports
+                self.stale_sensors = []
+            else:
+                self.stale_sensors = raw_stale
+        else:
+            self.stale_sensors = raw_stale
 
     def row_end_detected(self, vision: VisionResult) -> bool:
         """
-        Triple-condition row-end gate:
-          1. Front LiDAR > LIDAR_ROW_END_M  (clear space ahead)
-          2. At least one side ultrasonic > US_ROW_END_M  (open laterally)
-          3. Camera green density < GREEN_DENSITY_THRESHOLD  (no canopy)
-        All three must agree to avoid false positives at canopy gaps.
+        Triple-gate exit: LiDAR opens up AND one side opens up AND green drops.
+        In SIM_MODE with no camera (MockVision), green_density is always 0.40
+        so the density gate never falsely triggers a row-end.
         """
-        lidar_open  = self.lidar is not None and self.lidar > cfg.LIDAR_ROW_END_M
-        left_open   = self.us_left  is not None and self.us_left  > cfg.US_ROW_END_M
-        right_open  = self.us_right is not None and self.us_right > cfg.US_ROW_END_M
+        lidar_open  = (self.lidar is not None and
+                       self.lidar > cfg.LIDAR_ROW_END_M)
+        left_open   = (self.us_left  is not None and
+                       self.us_left  > cfg.US_ROW_END_M)
+        right_open  = (self.us_right is not None and
+                       self.us_right > cfg.US_ROW_END_M)
         side_open   = left_open or right_open
         density_low = (vision is not None and
                        vision.green_density < cfg.GREEN_DENSITY_THRESHOLD)
@@ -81,39 +110,44 @@ class FusionData:
 
     def lateral_nudge(self) -> float:
         """
-        DiffPhysDrone smooth obstacle-avoidance cost replaces the old
-        binary if/else potential field.
-
-        We estimate approach speed toward each wall from the current
-        ultrasonic readings relative to US_WALL_CLOSE_M:
-          approach = max(0, (US_WALL_CLOSE_M - dist) * CRUISE_SPEED_MS)
-        This is a conservative proxy — positive when inside the danger zone.
+        DiffPhysDrone smooth corridor centering.
+        If sensors are None (SITL before first DISTANCE_SENSOR arrives),
+        lateral_nudge_diffphys treats them as 99 m — no correction commanded.
         """
         L = self.us_left  if self.us_left  is not None else 99.0
         R = self.us_right if self.us_right is not None else 99.0
-
-        # Approach speed proxy: proportional to how deep inside danger zone
         approach_L = max(0.0, (cfg.US_WALL_CLOSE_M - L) * cfg.CRUISE_SPEED_MS)
         approach_R = max(0.0, (cfg.US_WALL_CLOSE_M - R) * cfg.CRUISE_SPEED_MS)
-
         return lateral_nudge_diffphys(
             self.us_left, self.us_right, approach_L, approach_R)
 
 
-# ── Mission brain ──────────────────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════════════════════
+# Mission brain
+# ══════════════════════════════════════════════════════════════════════════
 class OrchardBrain:
 
     def __init__(self):
-        self.fc     = FlightController(cfg.FC_CONNECTION, cfg.FC_BAUD)
-        self.hub    = SensorHub(cfg)
-        self.vision = RowVision(
-            model_path=cfg.YOLO_MODEL_PATH,
-            camera_index=cfg.CAMERA_INDEX,
-            frame_w=cfg.FRAME_W,
-            frame_h=cfg.FRAME_H,
-            conf_threshold=cfg.YOLO_CONF_THRESHOLD,
-        )
-        # DiffPhysDrone point-mass model for predictive state logging in SITL
+        log.info("=" * 60)
+        log.info(f"  Orchard Drone  |  SIM_MODE = {cfg.SIM_MODE}")
+        log.info(f"  FC connection  = {cfg.FC_CONNECTION}")
+        log.info(f"  Sensor timeout = {cfg.SENSOR_TIMEOUT_S} s")
+        log.info("=" * 60)
+
+        # 1. Flight controller (connection string from config)
+        self.fc = FlightController()
+
+        # 2. Sensor hub (MAVLink virtual or GPIO/serial hardware)
+        self.hub = SensorHub()
+
+        # 3. Wire sensor hub to FC watchdog BEFORE sensors start
+        #    so no DISTANCE_SENSOR message is missed
+        self.fc.register_sensor_hub(self.hub)
+
+        # 4. Vision (MockVision, RowVision+GStreamer, or RowVision+device)
+        self.vision = build_vision()
+
+        # 5. DiffPhysDrone point-mass model for SITL diagnostic logging
         self._phys = PointMassModel()
 
         self.state    = S.TAKEOFF
@@ -126,10 +160,10 @@ class OrchardBrain:
         self._yaw_deadline     = None
         self._dmove_init       = False
 
-    # ── Transition ─────────────────────────────────────────────────────────
+    # ── Helpers ────────────────────────────────────────────────────────────
 
     def _go(self, new_state: str):
-        log.info(f"  [{self.state}] -> [{new_state}]")
+        log.info(f"  [{self.state}] → [{new_state}]")
         self.state         = new_state
         self._state_t      = time.monotonic()
         self._dmove_init   = False
@@ -138,30 +172,37 @@ class OrchardBrain:
     def _time_in_state(self) -> float:
         return time.monotonic() - self._state_t
 
-    # ── Fail-safes ─────────────────────────────────────────────────────────
+    # ── Failsafes ──────────────────────────────────────────────────────────
 
     def _check_failsafes(self, fd: FusionData) -> bool:
         """
-        Returns True if a fail-safe fires (caller skips normal logic).
-        Checks:
-          1. Hardware sensor staleness  → LOITER + FAULT
-          2. Vision staleness           → warning only (non-critical)
-          3. Battery < 13.5 V (4S)      → RTL
+        Returns True if a failsafe was triggered (caller skips normal logic).
+
+        SIM_MODE notes:
+          - fd.stale_sensors is empty during the 15 s grace window, then
+            reflects real MAVLink sensor freshness
+          - Battery voltage is 0.0 V in SITL until SYS_STATUS arrives;
+            we skip the battery check when voltage == 0.0 to avoid false RTL
+          - Vision staleness: MockVision.age() is always < 1 s — no warning
         """
         if self.state in (S.RTL, S.FAULT, S.DONE):
             return False
 
+        # Hardware / virtual sensor staleness
         if fd.stale_sensors:
-            log.error(f"STALE SENSORS: {fd.stale_sensors} -> LOITER")
+            log.error(f"STALE SENSORS: {fd.stale_sensors} → LOITER")
             self.fc.loiter()
             self._go(S.FAULT)
             return True
 
+        # Vision staleness (non-critical — just disables shutter)
         if self.vision.age() > cfg.SENSOR_TIMEOUT_S:
             log.warning("Vision stale — shutter disabled this tick")
 
-        if 0.0 < self.fc.battery_volts < 13.5:
-            log.error(f"LOW BATTERY {self.fc.battery_volts:.2f} V -> RTL")
+        # Battery (skip when voltage is 0.0 — SITL before first SYS_STATUS)
+        v = self.fc.battery_volts
+        if 0.0 < v < 13.5:
+            log.error(f"LOW BATTERY {v:.2f} V → RTL")
             self._go(S.RTL)
             return True
 
@@ -171,11 +212,8 @@ class OrchardBrain:
 
     def _maybe_shutter(self, vision: VisionResult):
         """
-        Fire MAV_CMD_DO_DIGICAM_CONTROL when:
-          1. YOLO detects a tree with confidence >= threshold
-          2. Tree is centred in frame  (offset < TRUNK_CENTER_TOL_PX)
-          3. Tree bbox fills > 30% frame height  (drone is adjacent)
-          4. Cooldown elapsed since last shot
+        In SIM_MODE with MockVision, vision.best_tree is always None so
+        tree_centred and tree_close_enough are always False — no false triggers.
         """
         if vision is None:
             return
@@ -202,77 +240,54 @@ class OrchardBrain:
             await asyncio.sleep(1.0)
             self.fc.takeoff(cfg.TAKEOFF_ALT_M)
             self._phys.reset(alt_m=cfg.TAKEOFF_ALT_M)
-            log.info(f"Takeoff -> {cfg.TAKEOFF_ALT_M} m")
+            log.info(f"Takeoff → {cfg.TAKEOFF_ALT_M} m")
         if self.fc.reached_altitude(cfg.TAKEOFF_ALT_M):
-            log.info("Altitude OK")
+            log.info("Altitude OK → ALLEY_FOLLOW")
             self._go(S.ALLEY_FOLLOW)
 
     async def _state_alley_follow(self, fd: FusionData, vision: VisionResult):
-        """
-        Forward flight with three concurrent processes:
-          1. DiffPhysDrone smooth lateral correction (via FusionData.lateral_nudge)
-          2. YOLO-gated camera shutter
-          3. Triple-gate row-end detection
-        The physics model is stepped for SITL diagnostic logging.
-        """
         nudge = fd.lateral_nudge()
         self.fc.send_body_velocity(cfg.CRUISE_SPEED_MS, nudge, 0.0)
 
-        # Advance point-mass model for SITL predictive logging
-        if cfg._SITL:
+        if cfg.SIM_MODE:
             self._phys.step(cfg.CRUISE_SPEED_MS, nudge, 0.0, cfg.LOOP_PERIOD)
 
         self._maybe_shutter(vision)
 
         if fd.row_end_detected(vision):
-            photos_this_row = self._photos_taken - self._row_photo_start
-            log.info(f"Row end -> EXIT_MANEUVER  "
-                     f"(photos this row: {photos_this_row})")
+            photos = self._photos_taken - self._row_photo_start
+            log.info(f"Row end → EXIT_MANEUVER  (photos this row: {photos})")
             self._row_photo_start = self._photos_taken
             self._go(S.EXIT_MANEUVER)
 
     async def _state_exit_maneuver(self, fd: FusionData, vision: VisionResult):
-        """
-        Phase 1: Fly forward ROW_CLEAR_DIST_M to clear the last trees.
-        Phase 2: Yaw 180°.
-        """
         if not self._dmove_init:
             self.fc.start_distance_move(
                 cfg.CRUISE_SPEED_MS, 0.0, cfg.ROW_CLEAR_DIST_M)
             self._dmove_init = True
-
         if not self.fc.distance_move_complete():
             self.fc.send_body_velocity(cfg.CRUISE_SPEED_MS, 0.0, 0.0)
             return
-
         if self._yaw_deadline is None:
             self.fc.stop()
             self.fc.condition_yaw(cfg.YAW_TURN_DEG, relative=True)
             self._yaw_deadline = (time.monotonic() +
                                   self.fc.yaw_complete_in(cfg.YAW_TURN_DEG))
-            log.info("Yaw 180 in progress")
-
+            log.info("Yaw 180° in progress")
         if time.monotonic() >= self._yaw_deadline:
             self._rows += 1
             log.info(f"Row {self._rows} complete")
             self._go(S.SEARCH_NEXT)
 
     async def _state_search_next(self, fd: FusionData, vision: VisionResult):
-        """
-        Lateral shift to next row.
-        Row detection uses three independent signals for robustness.
-        """
         if not self._dmove_init:
             self.fc.start_distance_move(
                 0.0, cfg.LATERAL_SHIFT_M, cfg.LATERAL_SHIFT_M)
             self._dmove_init = True
-
         if not self.fc.distance_move_complete():
             self.fc.send_body_velocity(0.0, cfg.CRUISE_SPEED_MS, 0.0)
             return
-
         self.fc.stop()
-
         yolo_density = (vision is not None and
                         vision.green_density >= cfg.GREEN_DENSITY_THRESHOLD)
         us_wall      = ((fd.us_left  is not None and
@@ -280,14 +295,12 @@ class OrchardBrain:
                         (fd.us_right is not None and
                          fd.us_right < cfg.US_ROW_END_M))
         yolo_trees   = vision is not None and len(vision.trees) > 0
-
         if yolo_density or us_wall or yolo_trees:
-            log.info(f"New row (density={yolo_density} "
-                     f"us_wall={us_wall} trees={yolo_trees})")
+            log.info(f"New row found (density={yolo_density} "
+                     f"wall={us_wall} trees={yolo_trees})")
             self._go(S.ALLEY_FOLLOW)
         else:
-            log.info(f"Mission complete. "
-                     f"Rows={self._rows}  Photos={self._photos_taken}")
+            log.info(f"No more rows. Rows={self._rows} Photos={self._photos_taken}")
             self._go(S.RTL)
 
     async def _state_rtl(self, fd: FusionData, vision: VisionResult):
@@ -295,25 +308,20 @@ class OrchardBrain:
         self._go(S.DONE)
 
     async def _state_fault(self, fd: FusionData, vision: VisionResult):
-        """Sensors recovered within 10 s → resume.  Otherwise → RTL."""
         if not fd.stale_sensors:
-            log.info("Sensors recovered -> ALLEY_FOLLOW")
+            log.info("Sensors recovered → ALLEY_FOLLOW")
             self.fc.set_mode("GUIDED")
             self._go(S.ALLEY_FOLLOW)
         elif self._time_in_state() > 10.0:
-            log.error("Fault unresolved -> RTL")
+            log.error("Fault unresolved → RTL")
             self._go(S.RTL)
 
     # ── Main loop ──────────────────────────────────────────────────────────
 
     async def run(self):
-        log.info("=== Orchard Drone — Mission Start ===")
-        if cfg._SITL:
-            log.info("SITL mode active — EMA + latency buffer enabled")
-
         self.hub.start_all()
         self.vision.start()
-        await asyncio.sleep(2.0)   # let sensor threads warm up
+        await asyncio.sleep(2.0)   # let threads warm up
 
         dispatch = {
             S.TAKEOFF:       self._state_takeoff,
@@ -327,22 +335,19 @@ class OrchardBrain:
         try:
             while self.state != S.DONE:
                 tick_start = time.monotonic()
-
                 fd     = FusionData(self.hub, cfg.SENSOR_TIMEOUT_S)
                 vision = self.vision.read()
-
                 if not self._check_failsafes(fd):
                     handler = dispatch.get(self.state)
                     if handler:
                         await handler(fd, vision)
-
                 elapsed = time.monotonic() - tick_start
                 await asyncio.sleep(max(0.0, cfg.LOOP_PERIOD - elapsed))
 
         except asyncio.CancelledError:
             log.warning("Mission cancelled")
         except KeyboardInterrupt:
-            log.warning("Operator interrupt -> RTL")
+            log.warning("Operator interrupt → RTL")
             self.fc.rtl()
         finally:
             self.fc.stop()
@@ -350,10 +355,10 @@ class OrchardBrain:
             self.vision.stop()
             self.vision.cleanup()
             self.fc.close()
-            log.info(f"=== Mission ended — "
-                     f"rows={self._rows} photos={self._photos_taken} ===")
+            log.info(f"Mission ended — rows={self._rows} photos={self._photos_taken}")
 
 
+# ── Entry point ────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     brain = OrchardBrain()
     asyncio.run(brain.run())
