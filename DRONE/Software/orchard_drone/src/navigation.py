@@ -1,8 +1,12 @@
 # src/navigation.py
 # Thread-safe MAVLink wrapper for ArduPilot GUIDED mode.
-# DiffPhysDrone contribution: CommandSmoother + LatencyBuffer applied
-# inside send_body_velocity() — every velocity command is EMA-filtered
-# and optionally delayed to replicate measured actuator lag.
+#
+# HAL changes:
+#   - Connection string and baud driven entirely by cfg.SIM_MODE / cfg.FC_CONNECTION
+#   - EMA smoother always active; latency buffer active only in SIM_MODE
+#   - watchdog_loop dispatches DISTANCE_SENSOR messages to SensorHub.ingest_mavlink
+#     so virtual sensors stay fresh in SITL without a second UDP socket
+#   - register_sensor_hub() wires the SensorHub callback after construction
 
 import math
 import time
@@ -18,29 +22,34 @@ log = logging.getLogger("navigation")
 
 class FlightController:
 
-    def __init__(self, connection_str: str, baud: int = 921600):
-        log.info(f"Connecting to FC: {connection_str}")
+    def __init__(self, connection_str: str = None, baud: int = None):
+        conn = connection_str or cfg.FC_CONNECTION
+        baud = baud           or cfg.FC_BAUD
+        log.info(f"FC connecting → {conn}  (SIM_MODE={cfg.SIM_MODE})")
+
         self.mav = mavutil.mavlink_connection(
-            connection_str, baud=baud,
+            conn, baud=baud,
             source_system=255, source_component=0)
         self._lock = threading.Lock()
 
-        # Telemetry cache — written by watchdog, read by main loop
-        self._pos     = None   # (lat°, lon°, alt_rel_m)
+        # Telemetry cache
+        self._pos     = None
         self._heading = 0.0
         self._voltage = 0.0
         self._armed   = False
         self._mode    = ""
 
-        # Distance-move state — initialised here to prevent AttributeError
+        # Distance-move state
         self._dmove_start = None
         self._dmove_dist  = 0.0
 
-        # DiffPhysDrone: command smoother + latency buffer
-        # In production: smoother runs always; latency buffer is SITL-only
+        # DiffPhysDrone command pipeline
         self._smoother = CommandSmoother()
         self._latbuf   = LatencyBuffer()
-        self._sitl     = cfg._SITL   # True when running against SITL
+
+        # SensorHub callback — registered after construction via
+        # register_sensor_hub(). None until then.
+        self._sensor_hub = None
 
         self._running  = True
         self._watchdog = threading.Thread(
@@ -48,9 +57,17 @@ class FlightController:
         self._wait_heartbeat()
         self._watchdog.start()
 
+    def register_sensor_hub(self, hub) -> None:
+        """
+        Wire the SensorHub so the watchdog can forward DISTANCE_SENSOR
+        messages to virtual sensors.  Must be called before the mission loop.
+        """
+        self._sensor_hub = hub
+        log.info("FC: SensorHub registered for MAVLink sensor ingestion")
+
     # ── Watchdog ───────────────────────────────────────────────────────────
 
-    def _wait_heartbeat(self, timeout: float = 15.0):
+    def _wait_heartbeat(self, timeout: float = 30.0):
         log.info("Waiting for heartbeat…")
         self.mav.wait_heartbeat(timeout=timeout)
         log.info(f"Heartbeat OK  sys={self.mav.target_system} "
@@ -62,6 +79,8 @@ class FlightController:
             msg = self.mav.recv_match(blocking=False)
             if msg:
                 t = msg.get_type()
+
+                # ── Telemetry cache ────────────────────────────────────────
                 if t == "GLOBAL_POSITION_INT":
                     self._pos = (msg.lat / 1e7,
                                  msg.lon / 1e7,
@@ -74,6 +93,13 @@ class FlightController:
                         msg.base_mode &
                         mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED)
                     self._mode = mavutil.mode_string_v10(msg)
+
+                # ── Forward to virtual sensors (SITL only) ─────────────────
+                # This keeps MAVLinkSensor.age() fresh without a second socket.
+                if self._sensor_hub is not None:
+                    self._sensor_hub.ingest_mavlink(msg)
+
+            # GCS heartbeat every 1 s
             if time.monotonic() - last_hb >= 1.0:
                 with self._lock:
                     self.mav.mav.heartbeat_send(
@@ -81,9 +107,10 @@ class FlightController:
                         mavutil.mavlink.MAV_AUTOPILOT_INVALID,
                         0, 0, 0)
                 last_hb = time.monotonic()
-            time.sleep(0.005)
 
-    # ── Telemetry ──────────────────────────────────────────────────────────
+            time.sleep(0.005)   # ~200 Hz drain
+
+    # ── Telemetry properties ───────────────────────────────────────────────
 
     @property
     def position(self):
@@ -113,7 +140,7 @@ class FlightController:
                 self.mav.target_system,
                 mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
                 mode_id)
-        log.info(f"Mode -> {mode_name}")
+        log.info(f"Mode → {mode_name}")
 
     def arm(self, force: bool = False):
         with self._lock:
@@ -138,41 +165,29 @@ class FlightController:
                 self.mav.target_system, self.mav.target_component,
                 mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
                 0, 0, 0, 0, 0, 0, 0, altitude_m)
-        log.info(f"Takeoff -> {altitude_m} m")
+        log.info(f"Takeoff → {altitude_m} m")
 
     def reached_altitude(self, target_m: float, tol_m: float = 0.4) -> bool:
         if self._pos is None:
             return False
         return self._pos[2] >= (target_m - tol_m)
 
-    # ── Velocity — EMA + latency from DiffPhysDrone ───────────────────────
+    # ── Velocity — EMA + DiffPhysDrone latency buffer ─────────────────────
 
     def send_body_velocity(self, vx: float, vy: float, vz: float = 0.0):
         """
-        Send a body-frame NED velocity command.
-
-        Pipeline (both additions from DiffPhysDrone):
-          raw cmd → CommandSmoother (EMA α=1/15) → LatencyBuffer (33ms, SITL only)
-          → MAVLink SET_POSITION_TARGET_LOCAL_NED
-
-        The EMA smoother eliminates jitter from sensor noise (avoids oscillation).
-        The latency buffer makes SITL behave like real hardware by delaying the
-        command reaching the simulated FC, matching measured 33 ms actuator lag.
+        EMA smoothing always active (removes sensor jitter).
+        Latency buffer active only in SIM_MODE (replicates 33 ms actuator lag).
         """
-        # 1. EMA smooth
         svx, svy, svz = self._smoother.smooth(vx, vy, vz)
-
-        # 2. Latency delay (SITL only — real hardware has its own lag)
-        if self._sitl:
+        if cfg.SIM_MODE:
             svx, svy, svz = self._latbuf.push_and_get(svx, svy, svz)
-
         with self._lock:
             self.mav.mav.set_position_target_local_ned_send(
                 0,
-                self.mav.target_system,
-                self.mav.target_component,
+                self.mav.target_system, self.mav.target_component,
                 mavutil.mavlink.MAV_FRAME_BODY_NED,
-                0b0000_1111_1100_0111,   # velocity-only type_mask
+                0b0000_1111_1100_0111,
                 0, 0, 0,
                 svx, svy, svz,
                 0, 0, 0,
@@ -181,11 +196,10 @@ class FlightController:
     def stop(self):
         self._smoother.reset()
         self.send_body_velocity(0.0, 0.0, 0.0)
-        log.debug("Stop")
 
     def loiter(self):
         self.set_mode("LOITER")
-        log.warning("LOITER (failsafe)")
+        log.warning("LOITER engaged (failsafe)")
 
     # ── Yaw ────────────────────────────────────────────────────────────────
 
@@ -196,12 +210,9 @@ class FlightController:
             self.mav.mav.command_long_send(
                 self.mav.target_system, self.mav.target_component,
                 mavutil.mavlink.MAV_CMD_CONDITION_YAW,
-                0,
-                abs(angle_deg), rate_dps, direction,
-                1 if relative else 0,
-                0, 0, 0)
-        log.info(f"Yaw {'+' if angle_deg >= 0 else ''}{angle_deg}° "
-                 f"({'rel' if relative else 'abs'})")
+                0, abs(angle_deg), rate_dps, direction,
+                1 if relative else 0, 0, 0, 0)
+        log.info(f"Yaw {angle_deg}° ({'rel' if relative else 'abs'})")
 
     def yaw_complete_in(self, angle_deg: float, rate_dps: float = 40.0) -> float:
         return abs(angle_deg) / rate_dps + 0.5
@@ -217,7 +228,7 @@ class FlightController:
             return False
         return self._haversine(self._dmove_start, self._pos) >= self._dmove_dist
 
-    # ── Camera ─────────────────────────────────────────────────────────────
+    # ── Camera shutter ─────────────────────────────────────────────────────
 
     def trigger_camera(self):
         with self._lock:
@@ -247,6 +258,6 @@ class FlightController:
         R = 6_371_000.0
         lat1, lon1 = math.radians(p1[0]), math.radians(p1[1])
         lat2, lon2 = math.radians(p2[0]), math.radians(p2[1])
-        dlat, dlon = lat2 - lat1, lon2 - lon1
+        dlat, dlon = lat2-lat1, lon2-lon1
         a = math.sin(dlat/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin(dlon/2)**2
         return R * 2 * math.asin(math.sqrt(a))
