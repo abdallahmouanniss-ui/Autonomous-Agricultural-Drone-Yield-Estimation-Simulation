@@ -201,7 +201,7 @@ class OrchardBrain:
 
         # Battery (skip when voltage is 0.0 — SITL before first SYS_STATUS)
         v = self.fc.battery_volts
-        if 0.0 < v < 13.5:
+        if 0.0 < v < 10.0:
             log.error(f"LOW BATTERY {v:.2f} V → RTL")
             self._go(S.RTL)
             return True
