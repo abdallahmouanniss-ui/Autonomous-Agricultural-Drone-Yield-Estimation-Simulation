@@ -41,6 +41,9 @@
       <specular>0.1 0.1 0.1 1</specular>
     </light>
 
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- GROUND PLANE                                            -->
+    <!-- ═══════════════════════════════════════════════════════ -->
     <model name="ground_plane">
       <static>true</static>
       <link name="link">
@@ -68,316 +71,441 @@
       </link>
     </model>
 
-    <model name="tree_r1_t1">
-      <static>true</static>
-      <pose>0 0 0 0 0 0</pose>
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TREE ROW 1  (Y = 0)                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <model name="tree_r1_t1"><static>true</static><pose>0 0 0 0 0 0</pose>
       <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r1_t2"><static>true</static><pose>4 0 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r1_t3"><static>true</static><pose>8 0 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r1_t4"><static>true</static><pose>12 0 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r1_t5"><static>true</static><pose>16 0 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r1_t6"><static>true</static><pose>20 0 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
       </link>
     </model>
 
-    <model name="tree_r1_t2">
-      <static>true</static>
-      <pose>4 0 0 0 0 0</pose>
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TREE ROW 2  (Y = 5)                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <model name="tree_r2_t1"><static>true</static><pose>0 5 0 0 0 0</pose>
       <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r2_t2"><static>true</static><pose>4 5 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r2_t3"><static>true</static><pose>8 5 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r2_t4"><static>true</static><pose>12 5 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r2_t5"><static>true</static><pose>16 5 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r2_t6"><static>true</static><pose>20 5 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
       </link>
     </model>
 
-    <model name="tree_r1_t3">
-      <static>true</static>
-      <pose>8 0 0 0 0 0</pose>
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TREE ROW 3  (Y = 10)                                    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <model name="tree_r3_t1"><static>true</static><pose>0 10 0 0 0 0</pose>
       <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r3_t2"><static>true</static><pose>4 10 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r3_t3"><static>true</static><pose>8 10 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r3_t4"><static>true</static><pose>12 10 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r3_t5"><static>true</static><pose>16 10 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="tree_r3_t6"><static>true</static><pose>20 10 0 0 0 0</pose>
+      <link name="trunk">
+        <collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision>
+        <collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision>
+        <visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual>
+        <visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual>
       </link>
     </model>
 
-    <model name="tree_r1_t4">
-      <static>true</static>
-      <pose>12 0 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r1_t5">
-      <static>true</static>
-      <pose>16 0 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r1_t6">
-      <static>true</static>
-      <pose>20 0 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t1">
-      <static>true</static>
-      <pose>0 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t2">
-      <static>true</static>
-      <pose>4 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t3">
-      <static>true</static>
-      <pose>8 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t4">
-      <static>true</static>
-      <pose>12 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t5">
-      <static>true</static>
-      <pose>16 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r2_t6">
-      <static>true</static>
-      <pose>20 5 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t1">
-      <static>true</static>
-      <pose>0 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t2">
-      <static>true</static>
-      <pose>4 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t3">
-      <static>true</static>
-      <pose>8 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t4">
-      <static>true</static>
-      <pose>12 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t5">
-      <static>true</static>
-      <pose>16 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="tree_r3_t6">
-      <static>true</static>
-      <pose>20 10 0 0 0 0</pose>
-      <link name="trunk">
-        <visual name="trunk_vis">
-          <pose>0 0 1.25 0 0 0</pose>
-          <geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry>
-          <material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material>
-        </visual>
-        <visual name="canopy_vis">
-          <pose>0 0 2.8 0 0 0</pose>
-          <geometry><sphere><radius>0.9</radius></sphere></geometry>
-          <material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <include>
-      <uri>model://iris_with_ardupilot</uri>
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!--                                                                     -->
+    <!--  IRIS DRONE with ArduPilot + 3 Physics-Based Ray Sensors           -->
+    <!--                                                                     -->
+    <!--  The drone is modelled inline (not via <include>) so we can        -->
+    <!--  attach sensors directly to the chassis link.                       -->
+    <!--                                                                     -->
+    <!--  Sensor→ArduPilot data path:                                        -->
+    <!--    Gazebo Ray sensor → libgazebo_ros_ray_sensor.so                  -->
+    <!--      → ROS topic /drone/lidar_front  (sensor_msgs/Range)            -->
+    <!--      → ROS topic /drone/sonar_left   (sensor_msgs/Range)            -->
+    <!--      → ROS topic /drone/sonar_right  (sensor_msgs/Range)            -->
+    <!--    ArduPilot SITL bridge (ardupilot_gazebo plugin) subscribes       -->
+    <!--      to these topics and emits MAVLink DISTANCE_SENSOR messages     -->
+    <!--      with the correct orientation fields (0, 6, 2).                 -->
+    <!--                                                                     -->
+    <!--  NOTE: <collision> geometries on tree models (added above) are      -->
+    <!--  required so the ray sensors have physical surfaces to hit.          -->
+    <!--                                                                     -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <model name="iris_with_ardupilot">
       <pose>-3 2.5 0.195 0 0 0</pose>
-    </include>
+
+      <!-- ─── Chassis (base_link) ────────────────────────────────────── -->
+      <link name="base_link">
+        <inertial>
+          <mass>1.5</mass>
+          <inertia>
+            <ixx>0.0347563</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>0.0458929</iyy><iyz>0</iyz>
+            <izz>0.0977</izz>
+          </inertia>
+        </inertial>
+
+        <collision name="base_collision">
+          <pose>0 0 0.06 0 0 0</pose>
+          <geometry><box><size>0.47 0.47 0.11</size></box></geometry>
+        </collision>
+        <visual name="base_visual">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry><mesh><uri>model://iris_with_ardupilot/meshes/iris.dae</uri></mesh></geometry>
+        </visual>
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!--  SENSOR 1 — Front LiDAR (TFmini equivalent)              -->
+        <!--  ArduPilot orientation: MAV_SENSOR_ROTATION_NONE = 0     -->
+        <!--  Faces forward (+X body), range 0.1–30 m                 -->
+        <!--  pose: x y z roll pitch yaw  (yaw=0 → forward)           -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <sensor name="lidar_front" type="ray">
+          <pose>0.12 0 0.05 0 0 0</pose>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <visualize>false</visualize>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>1</samples>
+                <resolution>1</resolution>
+                <min_angle>0</min_angle>
+                <max_angle>0</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.1</min>
+              <max>30.0</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.005</stddev>
+            </noise>
+          </ray>
+          <!--
+            libgazebo_ros_ray_sensor bridges the Gazebo ray sensor to a
+            ROS sensor_msgs/Range topic. The ardupilot_gazebo SITL plugin
+            subscribes to this topic and publishes a MAVLink
+            DISTANCE_SENSOR message with:
+              orientation = MAV_SENSOR_ROTATION_NONE (0)
+              min_distance = 10 cm  (10 in ArduPilot cm units)
+              max_distance = 3000 cm
+          -->
+          <plugin name="lidar_front_plugin" filename="libgazebo_ros_ray_sensor.so">
+            <ros>
+              <remapping>~/out:=/drone/lidar_front</remapping>
+            </ros>
+            <output_type>sensor_msgs/Range</output_type>
+            <radiation_type>infrared</radiation_type>
+            <frame_name>base_link</frame_name>
+          </plugin>
+        </sensor>
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!--  SENSOR 2 — Left Ultrasonic (HC-SR04 equivalent)         -->
+        <!--  ArduPilot orientation: MAV_SENSOR_ROTATION_YAW_270 = 6  -->
+        <!--  Faces left (+Y body), range 0.02–4.5 m                  -->
+        <!--  pose yaw = +1.5708 rad (90°) rotates ray to face left   -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <sensor name="sonar_left" type="ray">
+          <pose>0 0.12 0.05 0 0 1.5708</pose>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <visualize>false</visualize>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>1</samples>
+                <resolution>1</resolution>
+                <min_angle>0</min_angle>
+                <max_angle>0</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.02</min>
+              <max>4.5</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name="sonar_left_plugin" filename="libgazebo_ros_ray_sensor.so">
+            <ros>
+              <remapping>~/out:=/drone/sonar_left</remapping>
+            </ros>
+            <output_type>sensor_msgs/Range</output_type>
+            <radiation_type>ultrasound</radiation_type>
+            <frame_name>base_link</frame_name>
+          </plugin>
+        </sensor>
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!--  SENSOR 3 — Right Ultrasonic (HC-SR04 equivalent)        -->
+        <!--  ArduPilot orientation: MAV_SENSOR_ROTATION_YAW_90 = 2   -->
+        <!--  Faces right (-Y body), range 0.02–4.5 m                 -->
+        <!--  pose yaw = -1.5708 rad (-90°) rotates ray to face right -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <sensor name="sonar_right" type="ray">
+          <pose>0 -0.12 0.05 0 0 -1.5708</pose>
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <visualize>false</visualize>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>1</samples>
+                <resolution>1</resolution>
+                <min_angle>0</min_angle>
+                <max_angle>0</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.02</min>
+              <max>4.5</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0.0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <plugin name="sonar_right_plugin" filename="libgazebo_ros_ray_sensor.so">
+            <ros>
+              <remapping>~/out:=/drone/sonar_right</remapping>
+            </ros>
+            <output_type>sensor_msgs/Range</output_type>
+            <radiation_type>ultrasound</radiation_type>
+            <frame_name>base_link</frame_name>
+          </plugin>
+        </sensor>
+
+      </link><!-- /base_link -->
+
+      <!-- ─── ArduPilot SITL flight controller plugin ───────────────── -->
+      <!--
+        This plugin connects Gazebo physics to ArduPilot SITL via UDP.
+        It also bridges the three ROS Range topics above into MAVLink
+        DISTANCE_SENSOR messages using the <rangefinder> sub-elements.
+        Each <topic> must match the remapped ROS topic from the sensors.
+        The <orientation> values are MAV_SENSOR_ROTATION_* integers.
+      -->
+      <plugin name="ardupilot_plugin" filename="libArduPilotPlugin.so">
+        <fdm_addr>127.0.0.1</fdm_addr>
+        <fdm_port_in>9002</fdm_port_in>
+        <fdm_port_out>9003</fdm_port_out>
+        <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+        <lock_step>true</lock_step>
+        <gazeboXYZToNED>0 0 0 3.141593 0 0</gazeboXYZToNED>
+
+        <!-- ── Rangefinder 1: Front LiDAR → orientation 0 (FORWARD) ── -->
+        <rangefinder>
+          <topic>/drone/lidar_front</topic>
+          <orientation>0</orientation>
+        </rangefinder>
+
+        <!-- ── Rangefinder 2: Left Sonar → orientation 6 (LEFT/YAW270) -->
+        <rangefinder>
+          <topic>/drone/sonar_left</topic>
+          <orientation>6</orientation>
+        </rangefinder>
+
+        <!-- ── Rangefinder 3: Right Sonar → orientation 2 (RIGHT/YAW90) -->
+        <rangefinder>
+          <topic>/drone/sonar_right</topic>
+          <orientation>2</orientation>
+        </rangefinder>
+
+        <!-- Standard Iris motor configuration -->
+        <control channel="0">
+          <jointName>rotor_0_joint</jointName>
+          <useForce>1</useForce>
+          <multiplier>838</multiplier>
+          <offset>-0.5</offset>
+          <servo_min>1100</servo_min>
+          <servo_max>1900</servo_max>
+          <type>VELOCITY</type>
+          <p_gain>0.20</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.5</cmd_max>
+          <cmd_min>-2.5</cmd_min>
+        </control>
+        <control channel="1">
+          <jointName>rotor_1_joint</jointName>
+          <useForce>1</useForce>
+          <multiplier>838</multiplier>
+          <offset>-0.5</offset>
+          <servo_min>1100</servo_min>
+          <servo_max>1900</servo_max>
+          <type>VELOCITY</type>
+          <p_gain>0.20</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.5</cmd_max>
+          <cmd_min>-2.5</cmd_min>
+        </control>
+        <control channel="2">
+          <jointName>rotor_2_joint</jointName>
+          <useForce>1</useForce>
+          <multiplier>-838</multiplier>
+          <offset>-0.5</offset>
+          <servo_min>1100</servo_min>
+          <servo_max>1900</servo_max>
+          <type>VELOCITY</type>
+          <p_gain>0.20</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.5</cmd_max>
+          <cmd_min>-2.5</cmd_min>
+        </control>
+        <control channel="3">
+          <jointName>rotor_3_joint</jointName>
+          <useForce>1</useForce>
+          <multiplier>-838</multiplier>
+          <offset>-0.5</offset>
+          <servo_min>1100</servo_min>
+          <servo_max>1900</servo_max>
+          <type>VELOCITY</type>
+          <p_gain>0.20</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.5</cmd_max>
+          <cmd_min>-2.5</cmd_min>
+        </control>
+      </plugin>
+
+    </model><!-- /iris_with_ardupilot -->
 
   </world>
 </sdf>
