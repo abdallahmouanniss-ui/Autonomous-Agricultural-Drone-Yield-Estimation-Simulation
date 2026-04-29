@@ -7,11 +7,9 @@
       <real_time_factor>1.0</real_time_factor>
     </physics>
 
-    <plugin filename="gz-sim-physics-system"
-            name="gz::sim::systems::Physics"/>
     <plugin filename="gz-sim-sensors-system"
             name="gz::sim::systems::Sensors">
-      <render_engine>ogre2</render_engine>
+      <render_engine>ogre</render_engine>
     </plugin>
     <plugin filename="gz-sim-user-commands-system"
             name="gz::sim::systems::UserCommands"/>
@@ -47,10 +45,14 @@
       <static>true</static>
       <link name="link">
         <collision name="collision">
-          <geometry><plane><normal>0 0 1</normal><size>200 200</size></plane></geometry>
+          <geometry>
+            <plane><normal>0 0 1</normal><size>200 200</size></plane>
+          </geometry>
         </collision>
         <visual name="visual">
-          <geometry><plane><normal>0 0 1</normal><size>200 200</size></plane></geometry>
+          <geometry>
+            <plane><normal>0 0 1</normal><size>200 200</size></plane>
+          </geometry>
           <material>
             <ambient>0.25 0.45 0.15 1</ambient>
             <diffuse>0.25 0.45 0.15 1</diffuse>
@@ -60,7 +62,6 @@
       </link>
     </model>
 
-    <!-- ========== ORCHARD TREES ========== -->
     <model name="tree_r1_t1"><static>true</static><pose>0 0 0 0 0 0</pose><link name="trunk"><collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision><collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision><visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual><visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual></link></model>
     <model name="tree_r1_t2"><static>true</static><pose>4 0 0 0 0 0</pose><link name="trunk"><collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision><collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision><visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual><visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual></link></model>
     <model name="tree_r1_t3"><static>true</static><pose>8 0 0 0 0 0</pose><link name="trunk"><collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision><collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision><visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual><visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual></link></model>
@@ -80,30 +81,59 @@
     <model name="tree_r3_t5"><static>true</static><pose>16 10 0 0 0 0</pose><link name="trunk"><collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision><collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision><visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual><visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual></link></model>
     <model name="tree_r3_t6"><static>true</static><pose>20 10 0 0 0 0</pose><link name="trunk"><collision name="col_trunk"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry></collision><collision name="col_canopy"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry></collision><visual name="trunk_vis"><pose>0 0 1.25 0 0 0</pose><geometry><cylinder><radius>0.12</radius><length>2.5</length></cylinder></geometry><material><ambient>0.4 0.25 0.1 1</ambient><diffuse>0.4 0.25 0.1 1</diffuse></material></visual><visual name="canopy_vis"><pose>0 0 2.8 0 0 0</pose><geometry><sphere><radius>0.9</radius></sphere></geometry><material><ambient>0.1 0.5 0.1 1</ambient><diffuse>0.1 0.5 0.1 1</diffuse></material></visual></link></model>
 
-    <!-- ========== DRONE ========== -->
-    <!--
-      We mirror what iris_with_ardupilot/model.sdf does:
-        - include iris_with_standoffs (real mesh + physics)
-        - add lift/drag + ApplyJointForce plugins
-        - add ArduPilotPlugin with corrected <sensor> tags
-      We also add our rangefinder sensors as extra links on base_link.
-    -->
     <model name="iris_with_ardupilot">
       <pose>-3 2.5 0.195 0 0 0</pose>
 
-      <!-- Real iris mesh with standoffs, props, and collisions -->
-      <include>
-        <uri>model://iris_with_standoffs</uri>
-      </include>
+      <link name="base_link">
+        <inertial>
+          <pose>0 0 0.06 0 0 0</pose>
+          <mass>1.5</mass>
+          <inertia>
+            <ixx>0.0347563</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>0.0458929</iyy><iyz>0</iyz>
+            <izz>0.0806</izz>
+          </inertia>
+        </inertial>
 
-      <!-- Rangefinder sensor links (massless, fixed to base) -->
-      <link name="lidar_front_link">
-        <pose>0.12 0 0.05 0 0 0</pose>
-        <inertial><mass>0.001</mass><inertia><ixx>1e-9</ixx><ixy>0</ixy><ixz>0</ixz><iyy>1e-9</iyy><iyz>0</iyz><izz>1e-9</izz></inertia></inertial>
-        <sensor name="lidar_front" type="gpu_ray">
+        <collision name="base_collision">
+          <pose>0 0 0.06 0 0 0</pose>
+          <geometry><box><size>0.18 0.18 0.10</size></box></geometry>
+        </collision>
+        <visual name="body_vis">
+          <pose>0 0 0.06 0 0 0</pose>
+          <geometry><box><size>0.18 0.18 0.10</size></box></geometry>
+          <material><ambient>0.15 0.15 0.15 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+        </visual>
+        <visual name="arm_fr_vis"><pose>0.11 -0.11 0.06 0 0 -0.7854</pose><geometry><box><size>0.31 0.025 0.02</size></box></geometry><material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+        <visual name="arm_fl_vis"><pose>0.11 0.11 0.06 0 0 0.7854</pose><geometry><box><size>0.31 0.025 0.02</size></box></geometry><material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+        <visual name="arm_rr_vis"><pose>-0.11 -0.11 0.06 0 0 0.7854</pose><geometry><box><size>0.31 0.025 0.02</size></box></geometry><material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+        <visual name="arm_rl_vis"><pose>-0.11 0.11 0.06 0 0 -0.7854</pose><geometry><box><size>0.31 0.025 0.02</size></box></geometry><material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material></visual>
+        <visual name="mount_0_vis"><pose>0.13 -0.22 0.07 0 0 0</pose><geometry><cylinder><radius>0.02</radius><length>0.04</length></cylinder></geometry><material><ambient>0.1 0.1 0.1 1</ambient></material></visual>
+        <visual name="mount_1_vis"><pose>-0.13 0.22 0.07 0 0 0</pose><geometry><cylinder><radius>0.02</radius><length>0.04</length></cylinder></geometry><material><ambient>0.1 0.1 0.1 1</ambient></material></visual>
+        <visual name="mount_2_vis"><pose>0.13 0.22 0.07 0 0 0</pose><geometry><cylinder><radius>0.02</radius><length>0.04</length></cylinder></geometry><material><ambient>0.1 0.1 0.1 1</ambient></material></visual>
+        <visual name="mount_3_vis"><pose>-0.13 -0.22 0.07 0 0 0</pose><geometry><cylinder><radius>0.02</radius><length>0.04</length></cylinder></geometry><material><ambient>0.1 0.1 0.1 1</ambient></material></visual>
+
+        <sensor name="imu_sensor" type="imu">
           <always_on>true</always_on>
-          <update_rate>10</update_rate>
-          <visualize>false</visualize>
+          <update_rate>1000</update_rate>
+          <imu>
+            <angular_velocity>
+              <x><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></x>
+              <y><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></y>
+              <z><noise type="gaussian"><mean>0</mean><stddev>0.009</stddev></noise></z>
+            </angular_velocity>
+            <linear_acceleration>
+              <x><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></x>
+              <y><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></y>
+              <z><noise type="gaussian"><mean>0</mean><stddev>0.021</stddev></noise></z>
+            </linear_acceleration>
+          </imu>
+        </sensor>
+
+        <!-- FIX 1 & 2: gpu_lidar → gpu_ray, topic stays same -->
+        <sensor name="lidar_front" type="gpu_ray">
+          <pose>0.12 0 0.05 0 0 0</pose>
+          <always_on>true</always_on><update_rate>10</update_rate><visualize>false</visualize>
           <topic>/drone/lidar_front</topic>
           <ray>
             <scan><horizontal><samples>1</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>0</max_angle></horizontal></scan>
@@ -111,19 +141,10 @@
             <noise><type>gaussian</type><mean>0.0</mean><stddev>0.005</stddev></noise>
           </ray>
         </sensor>
-      </link>
-      <joint name="lidar_front_joint" type="fixed">
-        <parent>iris_with_standoffs::base_link</parent>
-        <child>lidar_front_link</child>
-      </joint>
 
-      <link name="sonar_left_link">
-        <pose>0 0.12 0.05 0 0 1.5708</pose>
-        <inertial><mass>0.001</mass><inertia><ixx>1e-9</ixx><ixy>0</ixy><ixz>0</ixz><iyy>1e-9</iyy><iyz>0</iyz><izz>1e-9</izz></inertia></inertial>
         <sensor name="sonar_left" type="gpu_ray">
-          <always_on>true</always_on>
-          <update_rate>10</update_rate>
-          <visualize>false</visualize>
+          <pose>0 0.12 0.05 0 0 1.5708</pose>
+          <always_on>true</always_on><update_rate>10</update_rate><visualize>false</visualize>
           <topic>/drone/sonar_left</topic>
           <ray>
             <scan><horizontal><samples>1</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>0</max_angle></horizontal></scan>
@@ -131,19 +152,10 @@
             <noise><type>gaussian</type><mean>0.0</mean><stddev>0.01</stddev></noise>
           </ray>
         </sensor>
-      </link>
-      <joint name="sonar_left_joint" type="fixed">
-        <parent>iris_with_standoffs::base_link</parent>
-        <child>sonar_left_link</child>
-      </joint>
 
-      <link name="sonar_right_link">
-        <pose>0 -0.12 0.05 0 0 -1.5708</pose>
-        <inertial><mass>0.001</mass><inertia><ixx>1e-9</ixx><ixy>0</ixy><ixz>0</ixz><iyy>1e-9</iyy><iyz>0</iyz><izz>1e-9</izz></inertia></inertial>
         <sensor name="sonar_right" type="gpu_ray">
-          <always_on>true</always_on>
-          <update_rate>10</update_rate>
-          <visualize>false</visualize>
+          <pose>0 -0.12 0.05 0 0 -1.5708</pose>
+          <always_on>true</always_on><update_rate>10</update_rate><visualize>false</visualize>
           <topic>/drone/sonar_right</topic>
           <ray>
             <scan><horizontal><samples>1</samples><resolution>1</resolution><min_angle>0</min_angle><max_angle>0</max_angle></horizontal></scan>
@@ -152,38 +164,56 @@
           </ray>
         </sensor>
       </link>
-      <joint name="sonar_right_joint" type="fixed">
-        <parent>iris_with_standoffs::base_link</parent>
-        <child>sonar_right_link</child>
+
+      <link name="rotor_0">
+        <pose>0.13 -0.22 0.12 0 0 0</pose>
+        <inertial><mass>0.025</mass><inertia><ixx>9.75e-7</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.000166704</iyy><iyz>0</iyz><izz>0.000167604</izz></inertia></inertial>
+        <visual name="rotor_0_vis"><geometry><cylinder><radius>0.128</radius><length>0.005</length></cylinder></geometry><material><ambient>0.3 0.3 0.8 0.6</ambient><diffuse>0.3 0.3 0.8 0.6</diffuse></material></visual>
+      </link>
+      <joint name="rotor_0_joint" type="revolute">
+        <parent>base_link</parent><child>rotor_0</child>
+        <axis><xyz>0 0 1</xyz><limit><lower>-1e+16</lower><upper>1e+16</upper></limit><dynamics><damping>0.004</damping></dynamics></axis>
       </joint>
 
-      <!-- Lift/drag plugins (copied from iris_with_ardupilot/model.sdf) -->
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>0.084 0 0</cp><forward>0 1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_0</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>-0.084 0 0</cp><forward>0 -1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_0</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>0.084 0 0</cp><forward>0 1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_1</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>-0.084 0 0</cp><forward>0 -1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_1</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>0.084 0 0</cp><forward>0 -1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_2</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>-0.084 0 0</cp><forward>0 1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_2</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>0.084 0 0</cp><forward>0 -1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_3</link_name></plugin>
-      <plugin filename="gz-sim-lift-drag-system" name="gz::sim::systems::LiftDrag"><a0>0.3</a0><alpha_stall>1.4</alpha_stall><cla>4.2500</cla><cda>0.10</cda><cma>0.0</cma><cla_stall>-0.025</cla_stall><cda_stall>0.0</cda_stall><cma_stall>0.0</cma_stall><area>0.002</area><air_density>1.2041</air_density><cp>-0.084 0 0</cp><forward>0 1 0</forward><upward>0 0 1</upward><link_name>iris_with_standoffs::rotor_3</link_name></plugin>
+      <link name="rotor_1">
+        <pose>-0.13 0.22 0.12 0 0 0</pose>
+        <inertial><mass>0.025</mass><inertia><ixx>9.75e-7</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.000166704</iyy><iyz>0</iyz><izz>0.000167604</izz></inertia></inertial>
+        <visual name="rotor_1_vis"><geometry><cylinder><radius>0.128</radius><length>0.005</length></cylinder></geometry><material><ambient>0.3 0.3 0.8 0.6</ambient><diffuse>0.3 0.3 0.8 0.6</diffuse></material></visual>
+      </link>
+      <joint name="rotor_1_joint" type="revolute">
+        <parent>base_link</parent><child>rotor_1</child>
+        <axis><xyz>0 0 1</xyz><limit><lower>-1e+16</lower><upper>1e+16</upper></limit><dynamics><damping>0.004</damping></dynamics></axis>
+      </joint>
 
-      <plugin filename="gz-sim-apply-joint-force-system" name="gz::sim::systems::ApplyJointForce"><joint_name>iris_with_standoffs::rotor_0_joint</joint_name></plugin>
-      <plugin filename="gz-sim-apply-joint-force-system" name="gz::sim::systems::ApplyJointForce"><joint_name>iris_with_standoffs::rotor_1_joint</joint_name></plugin>
-      <plugin filename="gz-sim-apply-joint-force-system" name="gz::sim::systems::ApplyJointForce"><joint_name>iris_with_standoffs::rotor_2_joint</joint_name></plugin>
-      <plugin filename="gz-sim-apply-joint-force-system" name="gz::sim::systems::ApplyJointForce"><joint_name>iris_with_standoffs::rotor_3_joint</joint_name></plugin>
-      <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"/>
+      <link name="rotor_2">
+        <pose>0.13 0.22 0.12 0 0 0</pose>
+        <inertial><mass>0.025</mass><inertia><ixx>9.75e-7</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.000166704</iyy><iyz>0</iyz><izz>0.000167604</izz></inertia></inertial>
+        <visual name="rotor_2_vis"><geometry><cylinder><radius>0.128</radius><length>0.005</length></cylinder></geometry><material><ambient>0.8 0.3 0.3 0.6</ambient><diffuse>0.8 0.3 0.3 0.6</diffuse></material></visual>
+      </link>
+      <joint name="rotor_2_joint" type="revolute">
+        <parent>base_link</parent><child>rotor_2</child>
+        <axis><xyz>0 0 1</xyz><limit><lower>-1e+16</lower><upper>1e+16</upper></limit><dynamics><damping>0.004</damping></dynamics></axis>
+      </joint>
 
-      <plugin name="ArduPilotPlugin" filename="ArduPilotPlugin">
+      <link name="rotor_3">
+        <pose>-0.13 -0.22 0.12 0 0 0</pose>
+        <inertial><mass>0.025</mass><inertia><ixx>9.75e-7</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.000166704</iyy><iyz>0</iyz><izz>0.000167604</izz></inertia></inertial>
+        <visual name="rotor_3_vis"><geometry><cylinder><radius>0.128</radius><length>0.005</length></cylinder></geometry><material><ambient>0.8 0.3 0.3 0.6</ambient><diffuse>0.8 0.3 0.3 0.6</diffuse></material></visual>
+      </link>
+      <joint name="rotor_3_joint" type="revolute">
+        <parent>base_link</parent><child>rotor_3</child>
+        <axis><xyz>0 0 1</xyz><limit><lower>-1e+16</lower><upper>1e+16</upper></limit><dynamics><damping>0.004</damping></dynamics></axis>
+      </joint>
+
+      <plugin name="ArduPilotPlugin" filename="libArduPilotPlugin.so">
         <fdm_addr>127.0.0.1</fdm_addr>
         <fdm_port_in>9002</fdm_port_in>
         <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
-        <lock_step>1</lock_step>
-        <no_time_sync>1</no_time_sync>
-        <modelXYZToAirplaneXForwardZDown degrees="true">0 0 0 180 0 0</modelXYZToAirplaneXForwardZDown>
-        <gazeboXYZToNED degrees="true">0 0 0 180 0 90</gazeboXYZToNED>
-        <imuName>iris_with_standoffs::imu_link::imu_sensor</imuName>
+        <lock_step>true</lock_step>
+        <gazeboXYZToNED>0 0 0 3.141593 0 0</gazeboXYZToNED>
+        <imuName>imu_sensor</imuName>
 
-        <!-- index maps to rng_N in JSON → RNGFINDN_ORIENT param in ArduPilot -->
+        <!-- FIX 3: <rangefinder> → <sensor> with type/index/topic -->
         <sensor>
           <type>rangefinder</type>
           <index>1</index>
@@ -201,40 +231,36 @@
         </sensor>
 
         <control channel="0">
-          <jointName>iris_with_standoffs::rotor_0_joint</jointName>
-          <useForce>1</useForce><multiplier>838</multiplier><offset>0</offset>
+          <jointName>rotor_0_joint</jointName>
+          <useForce>1</useForce><multiplier>838</multiplier><offset>-0.5</offset>
           <servo_min>1100</servo_min><servo_max>1900</servo_max>
           <type>VELOCITY</type>
           <p_gain>0.20</p_gain><i_gain>0</i_gain><d_gain>0</d_gain>
           <i_max>0</i_max><i_min>0</i_min><cmd_max>2.5</cmd_max><cmd_min>-2.5</cmd_min>
-          <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
         <control channel="1">
-          <jointName>iris_with_standoffs::rotor_1_joint</jointName>
-          <useForce>1</useForce><multiplier>838</multiplier><offset>0</offset>
+          <jointName>rotor_1_joint</jointName>
+          <useForce>1</useForce><multiplier>838</multiplier><offset>-0.5</offset>
           <servo_min>1100</servo_min><servo_max>1900</servo_max>
           <type>VELOCITY</type>
           <p_gain>0.20</p_gain><i_gain>0</i_gain><d_gain>0</d_gain>
           <i_max>0</i_max><i_min>0</i_min><cmd_max>2.5</cmd_max><cmd_min>-2.5</cmd_min>
-          <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
         <control channel="2">
-          <jointName>iris_with_standoffs::rotor_2_joint</jointName>
-          <useForce>1</useForce><multiplier>-838</multiplier><offset>0</offset>
+          <jointName>rotor_2_joint</jointName>
+          <useForce>1</useForce><multiplier>-838</multiplier><offset>-0.5</offset>
           <servo_min>1100</servo_min><servo_max>1900</servo_max>
           <type>VELOCITY</type>
           <p_gain>0.20</p_gain><i_gain>0</i_gain><d_gain>0</d_gain>
           <i_max>0</i_max><i_min>0</i_min><cmd_max>2.5</cmd_max><cmd_min>-2.5</cmd_min>
-          <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
         <control channel="3">
-          <jointName>iris_with_standoffs::rotor_3_joint</jointName>
-          <useForce>1</useForce><multiplier>-838</multiplier><offset>0</offset>
+          <jointName>rotor_3_joint</jointName>
+          <useForce>1</useForce><multiplier>-838</multiplier><offset>-0.5</offset>
           <servo_min>1100</servo_min><servo_max>1900</servo_max>
           <type>VELOCITY</type>
           <p_gain>0.20</p_gain><i_gain>0</i_gain><d_gain>0</d_gain>
           <i_max>0</i_max><i_min>0</i_min><cmd_max>2.5</cmd_max><cmd_min>-2.5</cmd_min>
-          <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
         </control>
       </plugin>
 
